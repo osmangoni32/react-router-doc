@@ -5,14 +5,19 @@ import {
   Outlet,
   useLoaderData,
   useNavigation,
+  useSubmit,
 } from "react-router-dom";
 
 export default function Root() {
   const { contacts, q } = useLoaderData();
   const navigation = useNavigation();
+  const submit = useSubmit();
   useEffect(() => {
     document.getElementById("q").value = q;
   }, [q]);
+  const searching =
+    navigation.location &&
+    new URLSearchParams(navigation.location.search).has("q");
   return (
     <>
       <div id="sidebar">
@@ -26,8 +31,10 @@ export default function Root() {
               type="search"
               name="q"
               defaultValue={q}
+              onChange={(e) => submit(e.currentTarget.form)}
+              className={searching ? "loading" : ""}
             />
-            <div id="search-spinner" aria-hidden hidden={true} />
+            <div id="search-spinner" aria-hidden hidden={!searching} />
             <div className="sr-only" aria-live="polite"></div>
           </Form>
           <Form method="post">
