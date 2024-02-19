@@ -15,4 +15,10 @@ export async function EditContactAction({ request, params }) {
 export async function deleteContactAction({ params }) {
     await deleteContact(params.contactId);
     return redirect("/");
-  }
+}
+export async function updateContactFavorite({ request, params }) {
+  let formData = await request.formData();
+  return updateContact(params.contactId, {
+    favorite: formData.get("favorite") === "true",
+  });
+}
